@@ -11,6 +11,11 @@ const traverseDirectory = (currentDirectory: string = "", currentLine: number = 
 
     if (currentCommand.startsWith("$ cd")) {
         const newDirectory = currentCommand.slice(currentCommand.indexOf("cd") + 2);
+        console.log(newDirectory)
+        if (newDirectory.includes("..")) {
+            // console.log("here")
+            traverseDirectory(previousDirectory.trim(), currentLine + 1)
+        }
         previousDirectory = currentDirectory;
         traverseDirectory(newDirectory.trim(), currentLine + 1)
     } else if (currentCommand.startsWith("$ ls")) {
@@ -18,7 +23,7 @@ const traverseDirectory = (currentDirectory: string = "", currentLine: number = 
         const filesAndDirectoriesInDirectory = input.slice(currentLine + 1, filesAndDirectoriesInDirectoryRange)
         const allFilesInDirectory = filesAndDirectoriesInDirectory.filter((f) => !f.startsWith("dir"))
         const directorySize = allFilesInDirectory.map((x) => Number(x.split(" ")[0])).reduce((prev, curr) => prev + curr, 0);
-        
+
         const hasParentDirectory = currentDirectory !== previousDirectory;
         if (hasParentDirectory) {
             // console.log()
