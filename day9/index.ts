@@ -8,24 +8,57 @@ let prevDirection;
 const walkTail = (newHeadPosition: Position) => {
     const lastTailPosition = tailPositions[tailPositions.length - 1];
     const lastHeadPosition = headPositions[headPositions.length - 2];
-    if (newHeadPosition === lastTailPosition) return; // same place 
 
     // if new head position is adjacent to tail, skip
-    const isLeft = newHeadPosition.x - 1 === lastTailPosition.x
-    const isRight = newHeadPosition.x + 1 === lastTailPosition.x
+    if (newHeadPosition.x === lastTailPosition.x && Math.abs(lastTailPosition.y - lastHeadPosition.y) > 1) {
+        if (lastHeadPosition.y > lastTailPosition.y) {
+            tailPositions.push({ x: lastTailPosition.x, y: lastTailPosition.y + 1 });
+        } else {
+            tailPositions.push({ x: lastTailPosition.x, y: lastTailPosition.y - 1 });
+        }
+    }
 
-    const isDown = newHeadPosition.y - 1 === lastTailPosition.y
-    const isUp = newHeadPosition.y + 1 === lastTailPosition.y
 
-    const isAdjacent = (isRight || isLeft || isDown || isUp || (isRight && isUp) || (isRight && isDown) || (isLeft && isUp) || (isLeft && isDown));
-    if (isAdjacent) return;
-    // if tail is adjacent to newhead then dont update position
-    // console.log(isLeft)
-    // const newTailPosition =
-    // Tail is not adjacent to head, move tail
-    // if (lastTailPosition !== newHeadPosition) {
-    // console.log(newHeadPosition)
-    tailPositions.push(lastHeadPosition)
+    if (newHeadPosition.y == lastTailPosition.y && Math.abs(lastTailPosition.y - newHeadPosition.y) > 1) {
+        if (newHeadPosition.x > lastTailPosition.x) {
+            tailPositions.push({ x: lastTailPosition.x + 1, y: lastTailPosition.y });
+        }
+        else {
+            tailPositions.push({ x: lastTailPosition.x - 1, y: lastTailPosition.y })
+        }
+    }
+
+    if (newHeadPosition.x != lastTailPosition.x && newHeadPosition.y != lastTailPosition.y && !(Math.abs(lastTailPosition.x - newHeadPosition.x) == 1 && Math.abs(lastTailPosition.y - newHeadPosition.y) == 1)) {
+        if (Math.abs(lastTailPosition.y - newHeadPosition.y) == 1) {
+            if (newHeadPosition.x > lastTailPosition.x) tailPositions.push({ x: lastTailPosition.x + 1, y: lastTailPosition.y });
+            else tailPositions.push({ x: lastTailPosition.x - 1, y: lastTailPosition.y });
+            tailPositions[tailPositions.length -1].y = newHeadPosition.y;
+        }
+
+        if (Math.abs(lastTailPosition.x - newHeadPosition.x) == 1) {
+            if (newHeadPosition.y > lastTailPosition.y) tailPositions.push({ x: lastTailPosition.x, y: lastTailPosition.y + 1 });
+            else tailPositions.push({ x: lastTailPosition.x, y: lastTailPosition.y - 1 })
+            // tailPosition[0] = xh;
+            tailPositions[tailPositions.length -1].x = newHeadPosition.x;
+
+        }
+    }
+
+    // const isLeft = newHeadPosition.x === lastTailPosition.x
+    // const isRight = newHeadPosition.x + 1 === lastTailPosition.x
+
+    // const isDown = newHeadPosition.y - 1 === lastTailPosition.y
+    // const isUp = newHeadPosition.y + 1 === lastTailPosition.y
+
+    // const isAdjacent = (isRight || isLeft || isDown || isUp || (isRight && isUp) || (isRight && isDown) || (isLeft && isUp) || (isLeft && isDown));
+    // if (isAdjacent) return;
+    // // if tail is adjacent to newhead then dont update position
+    // // console.log(isLeft)
+    // // const newTailPosition =
+    // // Tail is not adjacent to head, move tail
+    // // if (lastTailPosition !== newHeadPosition) {
+    // // console.log(newHeadPosition)
+    // tailPositions.push(lastHeadPosition)
 
 }
 
@@ -75,7 +108,7 @@ const distinctTailPositions = tailPositions.filter((value, index, self) =>
     ))
 )
 // console.log(tailPositions.length)
-console.log(tailPositions)
+console.log(tailPositions.length)
 
 interface Position {
     x: number;
